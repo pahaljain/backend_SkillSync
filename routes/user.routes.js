@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/login", login);
 
 // Route for registering a new user (admin or trainer)
-router.post("/register", registerUser);
+router.post("/signup", registerUser);
 
 // Route to get all users (admin access only)
 // router.get("/users", getAllUsers);

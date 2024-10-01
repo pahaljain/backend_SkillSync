@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
 export const registerUser = async (req, res) => {
-  const { email, password, name, user_type } = req.body;
+  const { email, password, name, role } = req.body;
 
   try {
     // Check if user already exists
@@ -19,7 +19,7 @@ export const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       name,
-      user_type,
+      role,
     });
 
     // Save user to database
