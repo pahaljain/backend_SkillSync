@@ -19,11 +19,13 @@ const courseSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    employees: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Employee",  // Assuming Employee is the model name
-  }],
-  }
+  },
+  employees: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Employee",  // Reference to the Employee model
+    },
+  ],
 });
 
 const Course = mongoose.model("Course", courseSchema);

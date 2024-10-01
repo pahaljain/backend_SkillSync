@@ -4,7 +4,7 @@ import { addEmployee, getAllEmployees, getEmployeeById, updateEmployee, deleteEm
 const router = express.Router();
 
 // Route to get all employees
-router.get("/employees", getAllEmployees);
+router.get("/", getAllEmployees);
 
 // // Route to add a new employee
 // router.post("/employees", addEmployee);

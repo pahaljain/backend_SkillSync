@@ -2,20 +2,18 @@ import Course from "../models/course.model.js";
 
 // Add a new course
 export const addCourse = async (req, res) => {
-  const { title, description, trainer_id, employee_ids } = req.body;
+  const { title, description, trainer_id, trainer_name, employees } = req.body;
 
   try {
     const newCourse = new Course({
       title,
       description,
-      trainer: { trainer_id },
-      employees: employee_ids, // Assuming employees field is an array in your schema
+      trainer: { trainer_id, trainer_name }, 
+      employees, // Employees field now refers to an array of employee IDs
     });
 
     await newCourse.save();
-    res
-      .status(201)
-      .json({ message: "Course added successfully", course: newCourse });
+    res.status(201).json({ message: "Course added successfully", course: newCourse });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -25,8 +23,8 @@ export const addCourse = async (req, res) => {
 export const getAllCourses = async (req, res) => {
   try {
     const courses = await Course.find()
-      .populate("trainer_id")
-      .populate("employee_ids");
+      .populate("trainer.trainer_id") // Populate trainer
+      .populate("employees"); // Populate employee IDs
     res.status(200).json(courses);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -39,8 +37,8 @@ export const getCourseById = async (req, res) => {
 
   try {
     const course = await Course.findById(id)
-      .populate("trainer_id")
-      .populate("employee_ids");
+      .populate("trainer.trainer_id") 
+      .populate("employees");
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
     }

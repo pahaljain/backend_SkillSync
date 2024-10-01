@@ -11,6 +11,6 @@ router.post("/login", login);
 router.post("/signup", registerUser);
 
 // Route to get all users (admin access only)
-router.get("/users", getAllUsers);
+router.get("/", getAllUsers);
 
 export default router;
