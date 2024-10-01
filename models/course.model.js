@@ -18,7 +18,11 @@ const courseSchema = new mongoose.Schema({
     trainer_name: {
       type: String,
       required: true,
-    }
+    },
+    employees: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Employee",  // Assuming Employee is the model name
+  }],
   }
 });
 

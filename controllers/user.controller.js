@@ -29,3 +29,16 @@ export const registerUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Get all users
+export const getAllUsers = async (req, res) => {
+  try {
+    // Fetch all users from the User model
+    const users = await User.find({}, 'name');
+    console.log(users);
+    
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

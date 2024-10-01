@@ -3,19 +3,19 @@ import { addEmployee, getAllEmployees, getEmployeeById, updateEmployee, deleteEm
 
 const router = express.Router();
 
-// Route to add a new employee
-router.post("/employees", addEmployee);
-
 // Route to get all employees
 router.get("/employees", getAllEmployees);
 
-// Route to get a specific employee by ID
-router.get("/employees/:id", getEmployeeById);
+// // Route to add a new employee
+// router.post("/employees", addEmployee);
 
-// Route to update an employee by ID
-router.put("/employees/:id", updateEmployee);
+// // Route to get a specific employee by ID
+// router.get("/employees/:id", getEmployeeById);
 
-// Route to delete an employee by ID
-router.delete("/employees/:id", deleteEmployee);
+// // Route to update an employee by ID
+// router.put("/employees/:id", updateEmployee);
+
+// // Route to delete an employee by ID
+// router.delete("/employees/:id", deleteEmployee);
 
 export default router;

@@ -1,6 +1,6 @@
 import express from "express";
 import { login } from "../controllers/auth.controller.js";
-import { registerUser } from "../controllers/user.controller.js";
+import { getAllUsers, registerUser } from "../controllers/user.controller.js";
 
 const router = express.Router();
 
@@ -11,6 +11,6 @@ router.post("/login", login);
 router.post("/signup", registerUser);
 
 // Route to get all users (admin access only)
-// router.get("/users", getAllUsers);
+router.get("/users", getAllUsers);
 
 export default router;
