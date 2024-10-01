@@ -7,6 +7,7 @@ export const login = async (req, res) => {
   try {
     // Check if user exists
     const user = await User.findOne({ email });
+    
     if (!user) {
       return res.status(400).json({ message: "Invalid Email ID" });
     }
@@ -18,7 +19,12 @@ export const login = async (req, res) => {
     }
 
     // Respond with user data
-    res.status(200).json({ user_id: user.user_id });
+     res.status(200).json({
+       user_id: user._id, // Send user ID
+       name: user.name, // Send user's name
+       email: user.email, // Send user's email
+       role: user.role, // Send user's role (Admin or Trainer)
+     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
