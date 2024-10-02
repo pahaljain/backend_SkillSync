@@ -5,12 +5,12 @@ const feedbackSchema = new mongoose.Schema({
   punctuality: {
     type: Number,
     enum: [1, 2, 3, 4, 5],
-    required: true, 
-    default: 3, 
+    required: true,
+    default: 3,
   },
   hardworking: {
     type: Number,
-    enum: [1, 2, 3, 4, 5], 
+    enum: [1, 2, 3, 4, 5],
     required: true,
     default: 3,
   },
@@ -28,23 +28,21 @@ const feedbackSchema = new mongoose.Schema({
   }
 });
 
-const enrollmentSchema = new mongoose.Schema({
-  course_id: {
+// Schema for overall performance score
+const performanceSchema = new mongoose.Schema({
+  enrollment_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Course",
+    ref: "Enrollment",
     required: true,
   },
-  employee_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Employee",
+  feedback: feedbackSchema, // Embedding the feedback schema
+  overall_score: {
+    type: Number,
     required: true,
+    min: 0,
+    max: 10,
   },
-  feedback: {
-    type: feedbackSchema,
-    default: () => ({}) 
-  }
 });
 
-const Enrollment = mongoose.model("Enrollment", enrollmentSchema);
-
-export default Enrollment;
+const Performance = mongoose.model("Performance", performanceSchema);
+export default Performance;

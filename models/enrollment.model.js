@@ -11,8 +11,11 @@ const enrollmentSchema = new mongoose.Schema({
     ref: "Employee",
     required: true,
   },
+  feedback: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Performance",
+  }
 });
 
 const Enrollment = mongoose.model("Enrollment", enrollmentSchema);
-
 export default Enrollment;

@@ -20,7 +20,10 @@ export const enrollEmployee = async (req, res) => {
 // Get all enrollments
 export const getAllEnrollments = async (req, res) => {
   try {
-    const enrollments = await Enrollment.find().populate("course_id").populate("employee_id");
+    const enrollments = await Enrollment.find()
+      .populate("course_id")
+      .populate("employee_id");
+
     res.status(200).json(enrollments);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -32,7 +35,11 @@ export const getEnrollmentById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const enrollment = await Enrollment.findById(id).populate("course_id").populate("employee_id");
+    const enrollment = await Enrollment.findById(id)
+      .populate("course_id")
+      .populate("employee_id")
+      .populate("feedback");
+
     if (!enrollment) {
       return res.status(404).json({ message: "Enrollment not found" });
     }
@@ -41,34 +48,3 @@ export const getEnrollmentById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-// Update an enrollment (feedback)
-// export const updateEnrollment = async (req, res) => {
-//   const { id } = req.params;
-//   const updates = req.body;
-
-//   try {
-//     const enrollment = await Enrollment.findByIdAndUpdate(id, updates, { new: true });
-//     if (!enrollment) {
-//       return res.status(404).json({ message: "Enrollment not found" });
-//     }
-//     res.status(200).json(enrollment);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-// Delete an enrollment
-// export const deleteEnrollment = async (req, res) => {
-//   const { id } = req.params;
-
-//   try {
-//     const enrollment = await Enrollment.findByIdAndDelete(id);
-//     if (!enrollment) {
-//       return res.status(404).json({ message: "Enrollment not found" });
-//     }
-//     res.status(200).json({ message: "Enrollment deleted successfully" });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
