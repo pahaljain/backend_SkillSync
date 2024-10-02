@@ -3,6 +3,7 @@ import {
   addCourse,
   getAllCourses,
   getCourseById,
+  getCoursesByTrainer
 } from "../controllers/course.controller.js";
 
 const router = express.Router();
@@ -15,6 +16,9 @@ router.get("/", getAllCourses);
 
 // Route to get a specific course by ID
 router.get("/:id", getCourseById);
+
+// Route to get a specific course of trainer
+router.get("/trainer/:trainerId", getCoursesByTrainer);
 
 // Route to update a course by ID
 // router.put("/:id", updateCourse);

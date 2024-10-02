@@ -65,6 +65,22 @@ export const getCourseById = async (req, res) => {
   }
 };
 
+// Get courses assigned to a specific trainer
+export const getCoursesByTrainer = async (req, res) => {
+  const { trainerId } = req.params;
+
+  try {
+    const courses = await Course.find({ "trainer.trainer_id": trainerId });
+    if (!courses) {
+      return res.status(404).json({ message: "No courses found for this trainer" });
+    }
+    res.status(200).json(courses);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 // Update a course
 // export const updateCourse = async (req, res) => {
 //   const { id } = req.params;
