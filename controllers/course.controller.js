@@ -1,23 +1,36 @@
-import Course from "../models/course.model.js";
+import Course from '../models/course.model.js'; // Import the Course model
+import Employee from '../models/employee.model.js'; // Import the Employee model
 
 // Add a new course
 export const addCourse = async (req, res) => {
   const { title, description, trainer_id, trainer_name, employees } = req.body;
 
   try {
+    // Verify if all employee IDs exist in the Employee collection
+    const validEmployees = await Employee.find({ _id: { $in: employees } });
+    if (validEmployees.length !== employees.length) {
+      return res.status(400).json({ message: "Invalid or non-existent employee IDs" });
+    }
+
+    // Create the new course
     const newCourse = new Course({
       title,
       description,
-      trainer: { trainer_id, trainer_name }, 
-      employees, // Employees field now refers to an array of employee IDs
+      trainer: {
+        trainer_id, // Ensure this is correctly passed
+        trainer_name, // Ensure this is correctly passed
+      },
+      employees, // Array of valid employee ObjectIds
     });
 
     await newCourse.save();
     res.status(201).json({ message: "Course added successfully", course: newCourse });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error creating course:", error); // Log the actual error to help with debugging
+    res.status(500).json({ message: "Failed to create course", error: error.message });
   }
 };
+
 
 // Get all courses
 export const getAllCourses = async (req, res) => {

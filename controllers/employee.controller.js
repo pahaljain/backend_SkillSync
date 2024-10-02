@@ -19,7 +19,6 @@ export const addEmployee = async (req, res) => {
 
 // Get all employees
 export const getAllEmployees = async (req, res) => {
-    console.log("controller");
   try {
     const employees = await Employee.find({}, 'name'); // Adjust fields as needed
     res.status(200).json(employees);

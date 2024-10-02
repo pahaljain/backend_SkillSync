@@ -35,7 +35,6 @@ export const getAllUsers = async (req, res) => {
   try {
     // Fetch all users from the User model
     const users = await User.find({}, 'name');
-    console.log(users);
     
     res.status(200).json(users);
   } catch (error) {
