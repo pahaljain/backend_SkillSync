@@ -16,7 +16,8 @@ const courseSchema = new mongoose.Schema({
       required: true,
     },
     trainer_name: {
-      type: String,
+      type: mongoose.Schema.Types.String,
+      ref: "User",
       required: true,
     },
   },
