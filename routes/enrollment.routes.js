@@ -1,5 +1,10 @@
 import express from "express";
-import { enrollEmployee, getAllEnrollments, getEnrollmentById } from "../controllers/enrollment.controller.js";
+import {
+  enrollEmployee,
+  getAllEnrollments,
+  getEnrollmentById,
+  getEnrollmentByEmployeeAndCourse,
+} from "../controllers/enrollment.controller.js";
 
 const router = express.Router();
 
@@ -12,10 +17,8 @@ router.get("/", getAllEnrollments);
 // Route to get a specific enrollment by ID
 router.get("/:id", getEnrollmentById);
 
-// Route to update feedback for an enrollment
-// router.put("/:id", updateEnrollment);
+// Route to get enrollment by employee and course
+router.get("/:employee_id/:course_id", getEnrollmentByEmployeeAndCourse);
 
-// Route to delete an enrollment by ID
-// router.delete("/enrollments/:id", deleteEnrollment);
-
+// Additional routes as needed
 export default router;

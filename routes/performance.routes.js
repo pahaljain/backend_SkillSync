@@ -10,6 +10,6 @@ router.post("/assign-score", assignScore);
 router.get("/:courseId", getPerformanceByCourse);
 
 // Route to get performance for a specific employee
-router.get("/employee/:employeeId", getPerformanceByEmployee);
+router.get("/get/:employeeId", getPerformanceByEmployee);
 
 export default router;
