@@ -34,7 +34,7 @@ export const registerUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     // Fetch all users from the User model
-    const users = await User.find({}, 'name');
+    const users = await User.find({}, 'name email');
     
     res.status(200).json(users);
   } catch (error) {

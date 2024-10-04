@@ -20,7 +20,7 @@ export const addEmployee = async (req, res) => {
 // Get all employees
 export const getAllEmployees = async (req, res) => {
   try {
-    const employees = await Employee.find({}, 'name'); // Adjust fields as needed
+    const employees = await Employee.find({}, 'name email'); // Adjust fields as needed
     res.status(200).json(employees);
   } catch (error) {
     res.status(500).json({ message: error.message });
