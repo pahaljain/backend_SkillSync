@@ -1,5 +1,10 @@
 import express from "express";
-import { assignScore, getPerformanceByCourse, getPerformanceByEmployee } from "../controllers/performance.controller.js";
+import {
+  assignScore,
+  getPerformanceByCourse,
+  getPerformanceByEmployee,
+  getAllPerformances,
+} from "../controllers/performance.controller.js";
 
 const router = express.Router();
 
@@ -11,5 +16,7 @@ router.get("/:courseId", getPerformanceByCourse);
 
 // Route to get performance for a specific employee
 router.get("/get/:employeeId", getPerformanceByEmployee);
+
+router.get("/getall", getAllPerformances); // New route for top and bottom performers
 
 export default router;

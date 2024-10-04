@@ -4,8 +4,7 @@ import Performance from "../models/performance.model.js";
 // Assign performance scores to an employee
 export const assignScore = async (req, res) => {
   const { enrollment_id, feedback, overall_score } = req.body;
-  // console.log(req);
-  
+
   try {
     const enrollment = await Enrollment.findById(enrollment_id);
     if (!enrollment) {
@@ -39,21 +38,21 @@ export const assignScore = async (req, res) => {
   }
 };
 
+// Fetch performance for all employees in a course
 export const getPerformanceByCourse = async (req, res) => {
   const { courseId } = req.params;
 
   try {
     const enrollments = await Enrollment.find({ course_id: courseId })
-      .populate("employee_id")
+      .populate("employee_id", "name email") // Fetch only necessary fields
       .populate("feedback");
 
-    const performanceData = await Promise.all(enrollments.map(async (enrollment) => {
-      const feedback = enrollment.feedback ? await Performance.findById(enrollment.feedback) : null;
-      return {
-        employee_id: enrollment.employee_id,
-        feedback: feedback ? feedback.feedback : null,
-        overall_score: feedback ? feedback.overall_score : null,
-      };
+    const performanceData = enrollments.map((enrollment) => ({
+      employee: enrollment.employee_id, // Send employee details directly
+      feedback: enrollment.feedback ? enrollment.feedback.feedback : null,
+      overall_score: enrollment.feedback
+        ? enrollment.feedback.overall_score
+        : null,
     }));
 
     res.status(200).json(performanceData);
@@ -62,32 +61,62 @@ export const getPerformanceByCourse = async (req, res) => {
   }
 };
 
-
+// Fetch performance for a specific employee
 export const getPerformanceByEmployee = async (req, res) => {
   const { employeeId } = req.params;
 
   try {
-    // Find the enrollment associated with the employee
     const enrollment = await Enrollment.findOne({ employee_id: employeeId })
-      .populate("course_id") // Populate course details
-      .populate("feedback"); // Populate feedback
+      .populate("course_id", "title") // Fetch course title
+      .populate("feedback");
 
     if (!enrollment) {
       return res.status(404).json({ message: "Enrollment not found" });
     }
 
-    // Check if feedback is present
     const performanceData = enrollment.feedback
       ? {
-          employee_id: enrollment.employee_id,
-          feedback: enrollment.feedback.feedback, // Access the embedded feedback schema
-          overall_score: enrollment.feedback.overall_score, // Access overall score directly
+          course: enrollment.course_id,
+          feedback: enrollment.feedback.feedback,
+          overall_score: enrollment.feedback.overall_score,
         }
       : {
-          employee_id: enrollment.employee_id,
+          course: enrollment.course_id,
           feedback: null,
           overall_score: null,
         };
+
+    res.status(200).json(performanceData);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get performance data for all employees across all courses
+export const getAllPerformances = async (req, res) => {
+  try {
+    const performances = await Performance.find().populate({
+      path: "enrollment_id",
+      populate: [
+        { path: "employee_id", select: "name email" }, // Get employee details
+        { path: "course_id", select: "title" }, // Get course details
+      ],
+    });
+
+    // Map the data into a more usable format for the frontend
+    const performanceData = performances.map((performance) => ({
+      employee: {
+        id: performance.enrollment_id.employee_id._id,
+        name: performance.enrollment_id.employee_id.name,
+        email: performance.enrollment_id.employee_id.email,
+      },
+      course: {
+        id: performance.enrollment_id.course_id._id,
+        title: performance.enrollment_id.course_id.title,
+      },
+      feedback: performance.feedback,
+      overall_score: performance.overall_score,
+    }));
 
     res.status(200).json(performanceData);
   } catch (error) {
