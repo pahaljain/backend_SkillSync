@@ -67,30 +67,31 @@ export const getPerformanceByEmployee = async (req, res) => {
 
   try {
     const enrollment = await Enrollment.findOne({ employee_id: employeeId })
-      .populate("course_id", "title") // Fetch course title
+      .populate("course_id", "title")
       .populate("feedback");
 
     if (!enrollment) {
       return res.status(404).json({ message: "Enrollment not found" });
     }
 
-    const performanceData = enrollment.feedback
-      ? {
-          course: enrollment.course_id,
-          feedback: enrollment.feedback.feedback,
-          overall_score: enrollment.feedback.overall_score,
-        }
-      : {
-          course: enrollment.course_id,
-          feedback: null,
-          overall_score: null,
-        };
+    const performanceData = {
+      employee: {
+        _id: enrollment.employee_id,
+        // You might want to fetch more details about the employee if needed
+        // e.g., name and email can be populated if you have an Employee model
+      },
+      feedback: enrollment.feedback ? enrollment.feedback.feedback : null,
+      overall_score: enrollment.feedback
+        ? enrollment.feedback.overall_score
+        : null,
+    };
 
     res.status(200).json(performanceData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Fetch performance for all employees across all courses
 export const getAllPerformances = async (req, res) => {
