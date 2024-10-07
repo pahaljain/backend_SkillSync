@@ -1,3 +1,4 @@
+// routes.js
 import express from "express";
 import {
   assignScore,
@@ -8,8 +9,6 @@ import {
 
 const router = express.Router();
 
-
-
 // Route to get all performances
 router.get("/", getAllPerformances);
 
@@ -19,8 +18,7 @@ router.post("/assign-score", assignScore);
 // Route to get performance for a specific course
 router.get("/:courseId", getPerformanceByCourse);
 
-// Route to get performance for a specific employee
-router.get("/get/:employeeId", getPerformanceByEmployee);
-
+// Route to get performance for a specific employee in a specific course
+router.get("/get/:employeeId/:courseId", getPerformanceByEmployee);
 
 export default router;
