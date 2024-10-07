@@ -92,30 +92,21 @@ export const getPerformanceByEmployee = async (req, res) => {
   }
 };
 
-// Get performance data for all employees across all courses
+// Fetch performance for all employees across all courses
 export const getAllPerformances = async (req, res) => {
   try {
-    const performances = await Performance.find().populate({
-      path: "enrollment_id",
-      populate: [
-        { path: "employee_id", select: "name email" }, // Get employee details
-        { path: "course_id", select: "title" }, // Get course details
-      ],
-    });
+    const enrollments = await Enrollment.find()
+      .populate("employee_id", "name email") // Fetch only necessary employee fields
+      .populate("course_id", "title") // Fetch course title
+      .populate("feedback"); // Fetch feedback related to performance
 
-    // Map the data into a more usable format for the frontend
-    const performanceData = performances.map((performance) => ({
-      employee: {
-        id: performance.enrollment_id.employee_id._id,
-        name: performance.enrollment_id.employee_id.name,
-        email: performance.enrollment_id.employee_id.email,
-      },
-      course: {
-        id: performance.enrollment_id.course_id._id,
-        title: performance.enrollment_id.course_id.title,
-      },
-      feedback: performance.feedback,
-      overall_score: performance.overall_score,
+    const performanceData = enrollments.map((enrollment) => ({
+      employee: enrollment.employee_id, // Employee details
+      course: enrollment.course_id, // Course details
+      feedback: enrollment.feedback ? enrollment.feedback.feedback : null, // Feedback categories
+      overall_score: enrollment.feedback
+        ? enrollment.feedback.overall_score
+        : null, // Overall score
     }));
 
     res.status(200).json(performanceData);
